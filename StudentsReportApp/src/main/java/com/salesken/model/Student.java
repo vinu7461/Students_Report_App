@@ -1,5 +1,6 @@
 package com.salesken.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -7,28 +8,32 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import lombok.AllArgsConstructor;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@Document(indexName = "Student")
-@AllArgsConstructor
-@NoArgsConstructor
+@Document(indexName ="student")
 public class Student {
 
 	@Id
+	@Min(1)
 	private Integer id;
 	
-	@Field(type = FieldType.Text,name = "name")
+	@Field
+	@NotNull
 	private String name;
 	
+	@Field(type = FieldType.Auto, name = "semesters")
+    private List<Semester> semesters=new ArrayList<>();
+
 	
-	 @Field(type = FieldType.Auto, name = "semesters")
-	 @JsonIgnore
-     private List<Semester> semesters;
+	 public Student(Integer id, String name, List<Semester> semesters) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.semesters = semesters;
+	}
 
 
 	public Student(Integer id, String name) {
@@ -38,10 +43,13 @@ public class Student {
 	}
 
 
-	@Override
-	public String toString() {
-		return "Student [id=" + id + ", name=" + name + ", semesters=" + semesters + "]";
+	public Student() {
+		super();
 	}
+
+
+
+
 	 
 	 
 	
